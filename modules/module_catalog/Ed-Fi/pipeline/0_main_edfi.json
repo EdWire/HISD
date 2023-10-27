@@ -1,0 +1,204 @@
+{
+    "name": "0_main_edfi",
+    "properties": {
+        "activities": [
+            {
+                "name": "1_land_edfi",
+                "type": "ExecutePipeline",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "1_land_edfi",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "workspace": {
+                            "value": "@pipeline().parameters.workspace",
+                            "type": "Expression"
+                        },
+                        "ApiUrl": {
+                            "value": "@pipeline().parameters.ApiUrl",
+                            "type": "Expression"
+                        },
+                        "InstanceId": {
+                            "value": "@pipeline().parameters.InstanceId",
+                            "type": "Expression"
+                        },
+                        "SchoolYear": {
+                            "value": "@pipeline().parameters.SchoolYear",
+                            "type": "Expression"
+                        },
+                        "ModuleName": {
+                            "value": "@pipeline().parameters.ModuleName",
+                            "type": "Expression"
+                        },
+                        "DistrictId": {
+                            "value": "@pipeline().parameters.DistrictId",
+                            "type": "Expression"
+                        },
+                        "ApiLimit": {
+                            "value": "@pipeline().parameters.ApiLimit",
+                            "type": "Expression"
+                        },
+                        "kvName": {
+                            "value": "@pipeline().parameters.kvName",
+                            "type": "Expression"
+                        },
+                        "MinChangeVer": {
+                            "value": "@pipeline().parameters.MinChangeVer",
+                            "type": "Expression"
+                        },
+                        "MaxChangeVer": {
+                            "value": "@pipeline().parameters.MaxChangeVer",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "2_ingest_edfi",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "1_land_edfi",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "2_ingest_edfi",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "ModuleName": {
+                            "value": "@pipeline().parameters.ModuleName",
+                            "type": "Expression"
+                        },
+                        "DistrictId": {
+                            "value": "@pipeline().parameters.DistrictId",
+                            "type": "Expression"
+                        },
+                        "SchoolYear": {
+                            "value": "@pipeline().parameters.SchoolYear",
+                            "type": "Expression"
+                        },
+                        "Workspace": {
+                            "value": "@pipeline().parameters.workspace",
+                            "type": "Expression"
+                        },
+                        "InstanceId": {
+                            "value": "@pipeline().parameters.InstanceId",
+                            "type": "Expression"
+                        },
+                        "ApiUrl": {
+                            "value": "@pipeline().parameters.ApiUrl",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "3_refine_edfi",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "2_ingest_edfi",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "3_refine_edfi",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "ModuleName": {
+                            "value": "@pipeline().parameters.ModuleName",
+                            "type": "Expression"
+                        },
+                        "Workspace": {
+                            "value": "@pipeline().parameters.workspace",
+                            "type": "Expression"
+                        },
+                        "SchoolYear": {
+                            "value": "@pipeline().parameters.SchoolYear",
+                            "type": "Expression"
+                        },
+                        "DistrictId": {
+                            "value": "@pipeline().parameters.DistrictId",
+                            "type": "Expression"
+                        },
+                        "MetadataUrl": {
+                            "value": "@pipeline().parameters.MetadataUrl",
+                            "type": "Expression"
+                        },
+                        "InstanceId": {
+                            "value": "@pipeline().parameters.InstanceId",
+                            "type": "Expression"
+                        },
+                        "ApiUrl": {
+                            "value": "@pipeline().parameters.ApiUrl",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "MetadataUrl": {
+                "type": "string",
+                "defaultValue": "https://github.com/microsoft/OpenEduAnalytics/raw/main/modules/module_catalog/Ed-Fi/utils/Metadata.csv"
+            },
+            "kvName": {
+                "type": "string"
+            },
+            "workspace": {
+                "type": "string",
+                "defaultValue": "dev"
+            },
+            "ApiUrl": {
+                "type": "string",
+                "defaultValue": "https://api.ed-fi.org/v5.2/api/"
+            },
+            "InstanceId": {
+                "type": "string"
+            },
+            "SchoolYear": {
+                "type": "string"
+            },
+            "ModuleName": {
+                "type": "string",
+                "defaultValue": "Ed-Fi"
+            },
+            "ApiLimit": {
+                "type": "string",
+                "defaultValue": "100"
+            },
+            "DistrictId": {
+                "type": "string"
+            },
+            "MinChangeVer": {
+                "type": "string"
+            },
+            "MaxChangeVer": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "EdFi Module/basic"
+        },
+        "annotations": [],
+        "lastPublishTime": "2023-10-20T07:31:59Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
